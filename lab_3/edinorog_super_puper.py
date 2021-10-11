@@ -7,38 +7,70 @@ pygame.init()
 FPS = 30
 sc = pygame.display.set_mode((600, 800))
 
-#голубое небо
-sc.fill((0,255,255))
+NEBO = (130,202,250)
+RED = (255, 40, 40)
+ORANGE = (255, 165, 60)
+YELLOW = (255, 255, 0)
+GREEN = (92, 205, 50)
+BLUE = (0, 127, 253)
+DARK_BLUE = (40, 8, 253)
+VIOLET = (117, 87, 253)
+TRAVA = (80, 200, 120)
 
-#радуга
-A = [(255, 40, 40),(255, 165, 60),(255, 255, 0),(92, 205, 50), (117, 187, 253), (40, 8, 253), (40, 8, 100)]
-for i in range (0, 7, 1):
-    arc(sc, A[i], (-400-5*i, 0+5*i, 800, 1000), 0, m.pi, 9)
+def nebo(color):
+    '''
+    функция рисует небо
+    '''
+    sc.fill(color)
 
-#зеленая трава
-rect(sc, (0, 255, 0), (0, 300, 600, 500))
+def rainbow( x, y):
+    '''
+    функция рисует радугу
+    x,y - координаты начала
+    '''
+    A = [RED, ORANGE, YELLOW, GREEN, BLUE, DARK_BLUE, VIOLET]
+    for i in range (0, 7, 1):
+        arc(sc, A[i], (x, y+8*i, 750-8*i, 750-8*1), 0, m.pi, 10)
 
-#функция цветочка
-def cvetok(k,l,size):
-    line(sc, (0, 100, 0), [k,l],[k+2*size,l+3*size])
-    line(sc, (0, 100, 0), [k+2*size, l-1*size],[k+2*size,l+3*size])
-    ellipse(sc, (r.randint(0, 255), r.randint(0, 255), r.randint(0, 255)), (k+1*size, l-8*size , 3*size, 8*size), 0)
+def trava(screen, color, b):
+    '''
+    функция рисует траву как прямоугольник
+    '''
+    rect(screen, color, b)
 
-#цветочки
-for i in range(1,60,1):
-    k=r.randint(0,600)
-    l=r.randint(300,800)
-    size=r.randint(10,30)
-    cvetok(k,l,size/10)
+def flowers(number):
+    '''
+    функция рисует цветы
+    scale - зона появления цветов по х
+    l - зона появления цветов по у
+    size - размер
+    number - количество цветов
+    '''
+    for i in range(1,number,1):
+        scale=r.randint(0,600)
+        l=r.randint(300,800)
+        size=r.randint(10,30)/10
+        line(sc, (0, 100, 0), [scale,l],[scale+2*size,l+3*size])
+        line(sc, (0, 100, 0), [scale+2*size, l-1*size],[scale+2*size,l+3*size])
+        ellipse(sc, (r.randint(100, 255), r.randint(50, 255), r.randint(50, 255)), (scale+1*size, l-8*size , 3*size, 8*size), 0)
 
-
-#солнце
-for i in range(1,200,1):
-    ellipse(sc,  (255-2.55/2*i, 255, 2.55/2*i), (500-i, 100-i, 2*i,2*i),2)      
+#солнце)
+def sun():
+    '''
+    фунцкия рисует солнце
+    '''
+    for i in range(1,200,1):
+        circle(sc,  (255-6.25/10*i, 202, 1.275*i), (500, 100), i, 2)      
 
 
 #единорог
 def edinorog (x, y, i, p, k, f):
+    '''
+    функция рисует единорогов
+    x,y - координаты единорогов
+    i,p,k - коэффициенты для удобства
+    f - коэффициент для определения цвета
+    '''
     #хвост
     ellipse(sc, (255-f, 143+f, 193), (x-i*k*53-p*40, y+k*80, k*40,k*9), 0)
     ellipse(sc, (255-f, 143+f, 193), (x-i*k*41-p*k*60, y+k*50, k*60,k*9), 0)
@@ -99,9 +131,13 @@ def edinorog (x, y, i, p, k, f):
     ellipse(sc, (191-f, 143+f, 193), (x-i*k*37+i*k*140-p*k*26, y+k*51-k*70, k*26, k*20), 0)
     ellipse(sc, (191-f, 143+f, 193), (x-i*k*45+i*k*140-p*k*26, y+k*31-k*70, k*26, k*20), 0)
 
-#дерево
 def derevo (x, y, k, p, spelost):
-    
+    '''
+    функия рисует деревья с яблоками разной спелости
+    х,у - координаты дерева
+    k,p - коэффициенты для длины ствола/размера листвы
+    spelost - спелость яблока(насыщенность цвета)
+    '''
     #ствол
     rect(sc, (255, 255, 255), (x+6*k, y, 35*k, 110*p), 0)
     
@@ -151,6 +187,11 @@ def derevo (x, y, k, p, spelost):
         else:   
             ellipse(sc, (255, 255-t-5*(e-7), 255-t-14*(e-7)), (x+k*49-k*e, y-p*233-p*e, 2*p*e, 2*p*e), 2)
 
+nebo(NEBO)
+rainbow (-400, 0)
+trava(sc, TRAVA, (0, 300, 600, 500))
+sun()
+flowers(60)
 edinorog(300,350,1,0,0.6,10)
 edinorog(250,570,1,0,1,40)
 
